@@ -13,8 +13,8 @@ set /P O=Enter git option:
         rmdir .git /s /q
         git init
         git remote add module-crypto https://github.com/Invoke-Hub/Module-Crypto.git
-        git pull module-crypto main
-        git branch -M main
+        git pull
+        git checkout -f module-crypto/main
         exit
 
     :switch-case-O-push (
@@ -24,17 +24,14 @@ set /P O=Enter git option:
         git add ./market/crypto/*
         git add ./readme.md
         git commit -m "%C%"
-        git push -u module-crypto main
-        ::rmdir .git /s /q
+        git push -u module-crypto HEAD:main
         exit
     )
 
     :switch-case-O-pull
-        ::rmdir .git /s /q
         cd ./src/modules/
         git init .
         git branch -M main
         git remote add module-crypto https://github.com/Invoke-Hub/Module-Crypto.git
         git pull module-crypto main
-        ::rmdir .git /s /q
         exit
