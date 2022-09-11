@@ -95,7 +95,7 @@ export default class MCrypto extends CoinGeckoClient {
             }
 
             this.buildEmbed(data)
-            this._embed.sendMessageWithFile()
+            this._embed.sendMessage()
         }).catch(error => {
             console.log(error)
             CLogger.error(`Unable to retrieve ${this.name}, site is probably down.`)
@@ -143,7 +143,7 @@ export default class MCrypto extends CoinGeckoClient {
                 data["php_rate"] = data[`${this.id}Price`]
 
                 this.buildEmbed(data)
-                this._embed.sendMessageWithFile()
+                this._embed.sendMessage()
             }).catch(error => {
                 CLogger.error(`Unable to retrieve ${this.name}, site is probably down.`)
             })
@@ -156,7 +156,7 @@ export default class MCrypto extends CoinGeckoClient {
      * @return {EmbedBuilder} a discord embed builder
      */
     public buildEmbed(response: any): void {
-        this._embed.file = new AttachmentBuilder(`${process.cwd()}/src/modules/market/crypto/resources/images/${this.image}`, { name: 'profile-image.png' })
+        this._embed.files = [new AttachmentBuilder(`${process.cwd()}/src/modules/market/crypto/resources/images/${this.image}`, { name: 'profile-image.png' })]
         this._embed
             .setTitle(`${this.name} PRICE`)
             .setColor(this.color)
@@ -170,7 +170,7 @@ export default class MCrypto extends CoinGeckoClient {
                 inline: true
             })
             .setImage('attachment://profile-image.png')
-            .setFooter({ text: `${new Date().toUTCString()} UTC` })
+            .setFooter({ text: `${new Date().toUTCString()}` })
     }
 
     /**
