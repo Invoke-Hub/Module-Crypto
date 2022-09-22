@@ -15,7 +15,7 @@ export abstract class ECryptoMonitoring {
 
     private readonly _currencies: ICrypto[] = [{
         id: "wemix-token",
-        botId: "913757627769552918",
+        botId: process.env.BOT_ID1!,
         name: "WEMIX",
         color: "#0000FF",
         image: "wemix.png",
@@ -24,7 +24,7 @@ export abstract class ECryptoMonitoring {
         isEmbed: true
     }, {
         id: "smooth-love-potion",
-        botId: "916599306570592297",
+        botId: process.env.BOT_ID2!,
         name: "SLP",
         color: "#0000FF",
         image: "slp.png",
@@ -33,7 +33,7 @@ export abstract class ECryptoMonitoring {
         isEmbed: true
     }, {
         id: "axie-infinity",
-        botId: "957696584060113021",
+        botId: process.env.BOT_ID3!,
         name: "AXS",
         color: "#0000FF",
         image: "axs.png",
@@ -68,7 +68,7 @@ export abstract class ECryptoMonitoring {
                
                 new CRetrieveCrypto(currency, {
                     interaction: channel
-                }).retrieveFromCoinGecko(channel, null)
+                }).retrieveFromCoinGecko(channel, channels)
 
             })
             

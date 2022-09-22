@@ -1,5 +1,5 @@
 import { ICrypto } from "../interfaces/ICrypto";
-import { ActivityOptions, ActivityType, AttachmentBuilder, Channel, ClientUser, ColorResolvable, CommandInteraction, EmbedBuilder, TextChannel } from "discord.js";
+import { ActivityOptions, ActivityType, AttachmentBuilder, Channel, ChannelManager, ClientUser, ColorResolvable, CommandInteraction, EmbedBuilder, TextChannel } from "discord.js";
 import { CoinGeckoClient } from "coingecko-api-v3";
 import axios, { AxiosResponse } from "axios";
 import CLogger from "../../../main/utilities/logbuilder/controllers/CLogBuilder.js";
@@ -66,7 +66,7 @@ export default class MCrypto extends CoinGeckoClient {
      * @param {ChannelManager} channel a list of all channels the bot has access
      * @param {CommandInteraction | any} interaction interaction event from user
      */
-    public retrieveFromCoinGecko(channel: Channel | null, interaction: CommandInteraction | null): void {
+    async retrieveFromCoinGecko(channel: Channel | null, interaction: CommandInteraction | ChannelManager): Promise<void> {
         this.simplePrice({
             ids: this.id,
             vs_currencies: 'usd,php'
@@ -78,8 +78,10 @@ export default class MCrypto extends CoinGeckoClient {
             data["php_name"] = `PHP/${this.name}`
             data["php_rate"] = data.php
 
-            if (interaction instanceof CommandInteraction)
-                this.status(interaction.client.user, data)
+            this.status(interaction.client.user, data)
+
+            if (interaction.client.user?.id != process.env.BOT_ID1)
+                return;
 
             if (!this.isEmbed)
                 return
@@ -108,7 +110,7 @@ export default class MCrypto extends CoinGeckoClient {
      * @param {ChannelManager} channel a list of all channels the bot has access
      * @param {CommandInteraction | any} interaction interaction event from user
      */
-    public retrieveFromPost(channel: Channel | null, interaction: CommandInteraction | null): void {
+    async retrieveFromPost(channel: Channel | null, interaction: CommandInteraction | null): Promise<void> {
         if (this.url == null) {
             CLogger.info("Channel is not a Text Channel.")
             return
@@ -155,7 +157,7 @@ export default class MCrypto extends CoinGeckoClient {
      * @param {any} response a data response from crypto api
      * @return {EmbedBuilder} a discord embed builder
      */
-    public buildEmbed(response: any): void {
+    async buildEmbed(response: any): Promise<void> {
         this._embed.files = [new AttachmentBuilder(`${process.cwd()}/src/modules/market/crypto/resources/images/${this.image}`, { name: 'profile-image.png' })]
         this._embed
             .setTitle(`${this.name} PRICE`)
